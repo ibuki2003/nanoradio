@@ -52,7 +52,7 @@ $(TARGET).elf: $(SRCS) $(HDRS) $(LINKER_SCRIPT) $(OUTDIR)/system.o
 	@mkdir -p $(OUTDIR)
 	$(CC) -o $@ $(SRCS) $(OUTDIR)/system.o $(CFLAGS) $(LDFLAGS)
 
-$(OUTDIR)/system.o: $(SYSTEM_SRCS)
+$(OUTDIR)/system.o: $(SYSTEM_SRCS) src/funconfig.h
 	@mkdir -p $(OUTDIR)
 	$(CC) -c -o $@ $(SYSTEM_SRCS) $(CFLAGS)
 
