@@ -107,7 +107,8 @@ void add_freq(int8_t d) {
 
 #define LOOP_INTERVAL 10
 
-int main() {
+void inner_main() {
+  // here cpu is after power-up or wake-up
   setup();
 
   int8_t scan_dir = 0;
@@ -118,7 +119,7 @@ int main() {
 
   // Initialize IC
   KT0913_init();
-  KT0913_set_vol(16);
+  KT0913_set_vol(vol);
 
   // Initialize LCD
   LCD_init();
@@ -142,11 +143,21 @@ int main() {
         add_freq(-1);
         draw_l1();
       }
-      if (button_hold[1] == 1) {
+      if (button_release[1]) {
         am = !am;
         KT0913_set_amfm(am);
         add_freq(0);
         draw_l1();
+      }
+      if (button_hold[1] >= 100) {
+        // go to sleep
+        // turn off FET
+        funDigitalWrite(PC4, 1);
+        // wait for release
+        while (funDigitalRead(PA1) == 0) {}
+        Delay_Ms(100);
+        sleep();
+        return; // setup again
       }
       if (button_hold[2] == 1 || button_hold[2] >= 50) {
         add_freq(1);
@@ -182,3 +193,9 @@ int main() {
 
 }
 
+
+int main() {
+  while (1) {
+    inner_main();
+  }
+}
