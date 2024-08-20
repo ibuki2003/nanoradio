@@ -20,7 +20,18 @@ inline void LCD_init() {
       "\x01" // Clear Disp
   );
   while (*cmds) {
+    // note: these commands should be sent with delay
     LCD_send_command(*cmds);
     cmds++;
+  }
+
+  LCD_send_command(0x40 | 0x00);
+  uint8_t b = 0xe0;
+  for (uint8_t i = 0; i < 6; ++i) {
+    LCD_send_command(0x40 | (i << 3));
+    i2c_send(I2C_LCD_ADDR, (const uint8_t[]){
+        0x40, b, b, b, b, b, b, b, b,
+    }, 9);
+    b = (b >> 1) | 0x80;
   }
 }
