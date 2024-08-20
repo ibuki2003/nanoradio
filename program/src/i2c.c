@@ -1,87 +1,87 @@
 #include "i2c.h"
 #include <ch32v003fun.h>
 
+uint8_t i2c_send(uint8_t addr, const uint8_t *data, uint8_t sz);
+uint8_t i2c_recv(uint8_t addr, uint8_t *data, uint8_t sz);
 uint8_t i2c_send_recv(uint8_t addr, const uint8_t* send, uint8_t send_size, uint8_t* recv, uint8_t recv_size);
 
 #define TIMEOUT_MAX 100000
 #define WAIT_WHILE_TIMEOUT(expr) { int32_t timeout = TIMEOUT_MAX; while((expr) && --timeout); if(timeout==0) return 1; }
 
 inline static uint8_t i2c_chk_evt(uint32_t event_mask) {
-	/* read order matters here! STAR1 before STAR2!! */
-	uint32_t status = I2C1->STAR1 | (I2C1->STAR2<<16);
-	return (status & event_mask) == event_mask;
+  /* read order matters here! STAR1 before STAR2!! */
+  uint32_t status = I2C1->STAR1 | (I2C1->STAR2<<16);
+  return (status & event_mask) == event_mask;
 }
 
 /*
  * low-level packet send for blocking polled operation via i2c
  */
-uint8_t i2c_send(uint8_t addr, const uint8_t *data, uint8_t sz)
+uint8_t i2c_send_raw(uint8_t addr, const uint8_t *data, uint8_t sz, bool last)
 {
 
-  WAIT_WHILE_TIMEOUT(I2C1->STAR2 & I2C_STAR2_BUSY);
+  // Set START condition
+  I2C1->CTLR1 |= I2C_CTLR1_START;
 
-	// Set START condition
-	I2C1->CTLR1 |= I2C_CTLR1_START;
+  // wait for master mode select
+  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
 
-	// wait for master mode select
-	WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
+  // send 7-bit address + write flag
+  I2C1->DATAR = addr<<1;
 
-	// send 7-bit address + write flag
-	I2C1->DATAR = addr<<1;
+  // wait for transmit condition
+  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 
-	// wait for transmit condition
-	WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
-	// send data one byte at a time
-	while(sz--) {
-		// wait for TX Empty
+  // send data one byte at a time
+  while(sz--) {
+    // wait for TX Empty
     WAIT_WHILE_TIMEOUT(!(I2C1->STAR1 & I2C_STAR1_TXE));
 
-		// send command
-		I2C1->DATAR = *data++;
-	}
+    // send command
+    I2C1->DATAR = *data++;
+  }
 
-	// wait for tx complete
-	WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+  // wait for tx complete
+  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 
-	// set STOP condition
-	I2C1->CTLR1 |= I2C_CTLR1_STOP;
+  // set STOP condition
+  if (last) I2C1->CTLR1 |= I2C_CTLR1_STOP;
 
-	// we're happy
-	return 0;
+  // we're happy
+  return 0;
 }
 
-uint8_t i2c_recv(uint8_t addr, uint8_t *data, uint8_t sz)
+uint8_t i2c_recv_raw(uint8_t addr, uint8_t *data, uint8_t sz, bool last)
 {
+  // Set START condition
+  I2C1->CTLR1 |= I2C_CTLR1_START | I2C_CTLR1_ACK;
 
-  WAIT_WHILE_TIMEOUT(I2C1->STAR2 & I2C_STAR2_BUSY);
+  // wait for master mode select
+  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
 
-	// Set START condition
-	I2C1->CTLR1 |= I2C_CTLR1_START;
+  // send 7-bit address + read flag
+  I2C1->DATAR = addr<<1 | 1;
 
-	// wait for master mode select
-	WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
+  // wait for transmit condition
+  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
 
-	// send 7-bit address + read flag
-	I2C1->DATAR = addr<<1 | 1;
+  // send data one byte at a time
+  while(sz--) {
+    if (sz == 0) {
+      // last
+      I2C1->CTLR1 |= I2C_CTLR1_ACK;
+      if (last) I2C1->CTLR1 |= I2C_CTLR1_STOP;
+    }
 
-	// wait for transmit condition
-	WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
-
-	// send data one byte at a time
-	while(sz--) {
-		// wait for TX Empty
-    /* WAIT_WHILE_TIMEOUT(!(I2C1->STAR1 & I2C_STAR1_TXE)); */
+    // wait for RX Ready
     WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_BYTE_RECEIVED));
 
-		// send command
-		*data++ = I2C1->DATAR;
-	}
+    // send command
+    *data++ = I2C1->DATAR;
+  }
 
-	// set STOP condition
-	I2C1->CTLR1 |= I2C_CTLR1_STOP;
-
-	// we're happy
-	return 0;
+  // we're happy
+  return 0;
 }
 
+void i2c_setup();
