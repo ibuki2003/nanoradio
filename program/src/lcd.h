@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <i2c.h>
 
-const int I2C_LCD_ADDR = 0x3e;
+#define I2C_LCD_ADDR 0x3e
 
 inline void LCD_send_command(uint8_t cmd) {
   uint8_t buf[2] = {0x00, cmd};
@@ -20,7 +20,7 @@ inline void LCD_init() {
       "\x01" // Clear Disp
   );
   while (*cmds) {
-    AQM0802_send_command(*cmds);
+    LCD_send_command(*cmds);
     cmds++;
   }
 }
