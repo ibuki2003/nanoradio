@@ -85,15 +85,12 @@ void draw_station_name() {
   uint8_t sbuf[9];
   for (uint i = 1; i < 9; ++i) sbuf[i] = ' ';
   sbuf[0] = 0x40;
-  {
-    FreqMemory const* ptr = am ? FREQS_AM[area] : FREQS_FM[area];
-    uint16_t targ_freq = am ? am_freq : fm_freq;
-    for (; ptr->freq <= targ_freq; ++ptr) {
-      if (ptr->freq == targ_freq) {
-        my_strcpy(sbuf + 1, (const uint8_t*)ptr->name);
-        break;
-      }
-    }
+
+  char const* const name = find_station(am ? am_freq : fm_freq, am, area);
+  if (name) {
+    my_strcpy(&sbuf[1], (const uint8_t*)name);
+  } else {
+    sbuf[1] = '-';
   }
 
   // on line 2

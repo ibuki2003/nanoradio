@@ -363,3 +363,56 @@ const FreqMemory* const FREQS_FM[8] = {
   FREQS_FM_KYUSHU,
 };
 
+
+// pointer to *nearest* station entry
+FreqMemory const* fptr = 0;
+
+// Run a naive search on the table
+// need to call this after changing am/fm or area
+void find_station_refresh(uint16_t freq, bool am, uint8_t area) {
+  fptr = am ? FREQS_AM[area] : FREQS_FM[area];
+  ++fptr;
+  if (freq <= fptr->freq) return;
+
+  while (fptr->freq < freq) ++fptr;
+}
+
+char const* find_station(uint16_t freq, bool am, uint8_t area) {
+  static bool last_am = 0;
+  static uint8_t last_area = 255; // invalid area
+
+  if (last_am != am || last_area != area || !fptr) {
+    last_am = am;
+    last_area = area;
+    find_station_refresh(freq, am, area);
+    return fptr && (fptr->freq == freq) ? fptr->name : 0;
+  }
+
+  if (fptr->freq == freq) return fptr->name;
+  else if (freq < fptr->freq) {
+    while (1) {
+      FreqMemory const* prev = fptr - 1;
+      if (prev->freq == freq) {
+        fptr = prev;
+        break;
+      }
+      if (freq > prev->freq) {
+        break;
+      }
+      fptr = prev;
+    }
+  } else {
+    while (1) {
+      FreqMemory const* next = fptr + 1;
+      if (next->freq == freq) {
+        fptr = next;
+        break;
+      }
+      if (freq < next->freq) {
+        break;
+      }
+      fptr = next;
+    }
+  }
+  return (fptr->freq == freq) ? fptr->name : 0;
+}
