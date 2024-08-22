@@ -4,6 +4,7 @@
 #include "lcd_kana.h"
 
 const FreqMemory FREQS_AM_HOKKAIDO[] = {
+  {0, NULL},
   {567, "NHKﾀﾞｲ1"},
   {585, "NHKﾀﾞｲ1"},
   {603, "NHKﾀﾞｲ1"},
@@ -29,10 +30,11 @@ const FreqMemory FREQS_AM_HOKKAIDO[] = {
   {1449, "HBCﾗｼﾞｵ"},
   {1467, "NHKﾀﾞｲ2"},
   {1602, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_TOHOKU[] = {
+  {0, NULL},
   {531, "NHKﾀﾞｲ1"},
   {540, "NHKﾀﾞｲ1"},
   {684, "IBCﾗｼﾞｵ"},
@@ -51,10 +53,11 @@ const FreqMemory FREQS_AM_TOHOKU[] = {
   {1521, "NHKﾀﾞｲ2"},
   {1575, "AFN"},
   {1602, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_KANTO[] = {
+  {0, NULL},
   {594, "NHKﾀﾞｲ1"},
   {693, "NHKﾀﾞｲ2"},
   {765, "YBSﾗｼﾞｵ"},
@@ -69,10 +72,11 @@ const FreqMemory FREQS_AM_KANTO[] = {
   {1422, "ﾗｼﾞｵﾆｯﾎﾟﾝ"},
   {1530, "CRTﾄﾁｷﾞﾎｳｿｳ"},
   {1602, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_CHUBU[] = {
+  {0, NULL},
   {639, "NHKﾀﾞｲ2"},
   {648, "NHKﾀﾞｲ1"},
   {729, "NHKﾀﾞｲ1"},
@@ -97,10 +101,11 @@ const FreqMemory FREQS_AM_CHUBU[] = {
   {1467, "NHKﾀﾞｲ2"},
   {1521, "NHKﾀﾞｲ2"},
   {1593, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_KINKI[] = {
+  {0, NULL},
   {558, "ﾗｼﾞｵｶﾝｻｲ"},
   {666, "NHKﾀﾞｲ1"},
   {828, "NHKﾀﾞｲ2"},
@@ -109,10 +114,11 @@ const FreqMemory FREQS_AM_KINKI[] = {
   {1179, "MBSﾗｼﾞｵ"},
   {1314, "ﾗｼﾞｵｵｵｻｶ"},
   {1431, "WBSﾜｶﾔﾏﾎｳｿｳ"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_CHUGOKU[] = {
+  {0, NULL},
   {603, "NHKﾀﾞｲ1"},
   {675, "NHKﾀﾞｲ1"},
   {702, "NHKﾀﾞｲ2"},
@@ -128,10 +134,11 @@ const FreqMemory FREQS_AM_CHUGOKU[] = {
   {1494, "RSKﾗｼﾞｵ"},
   {1575, "AFN"},
   {1593, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_SHIKOKU[] = {
+  {0, NULL},
   {828, "NHKﾀﾞｲ2"},
   {900, "RKCﾗｼﾞｵ"},
   {945, "NHKﾀﾞｲ1"},
@@ -144,10 +151,11 @@ const FreqMemory FREQS_AM_SHIKOKU[] = {
   {1368, "NHKﾀﾞｲ1"},
   {1449, "RNCﾆｼﾆｯﾎﾟﾝﾎｳｿｳ"},
   {1512, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_AM_KYUSHU[] = {
+  {0, NULL},
   {540, "NHKﾀﾞｲ1"},
   {549, "NHKﾀﾞｲ1"},
   {576, "NHKﾀﾞｲ1"},
@@ -175,11 +183,12 @@ const FreqMemory FREQS_AM_KYUSHU[] = {
   {1467, "NHKﾀﾞｲ2"},
   {1575, "AFN"},
   {1602, "NHKﾀﾞｲ2"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 
 const FreqMemory FREQS_FM_HOKKAIDO[] = {
+  {0, NULL},
   {764, "AIR-G'"},
   {785, "AIR-G'"},
   {794, "NORTH WAVE"},
@@ -199,10 +208,11 @@ const FreqMemory FREQS_FM_HOKKAIDO[] = {
   {885, "NHK-FM"},
   {888, "AIR-G'"},
   {894, "AIR-G'"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_TOHOKU[] = {
+  {0, NULL},
   {761, "ｴﾌｴﾑｲﾜﾃ"},
   {771, "Date fm"},
   {800, "ｴﾌｴﾑｱｵﾓﾘ"},
@@ -215,10 +225,11 @@ const FreqMemory FREQS_FM_TOHOKU[] = {
   {853, "NHK-FM"},
   {860, "NHK-FM"},
   {867, "NHK-FM"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_KANTO[] = {
+  {0, NULL},
   {761, "InterFM"},
   {764, "RADIO BERRY"},
   {780, "bayfm"},
@@ -239,10 +250,11 @@ const FreqMemory FREQS_FM_KANTO[] = {
   {851, "NHK-FM"},
   {856, "NHK-FM"},
   {863, "FMｸﾞﾝﾏ"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_CHUBU[] = {
+  {0, NULL},
   {761, "FMﾌｸｲ"},
   {778, "ZIP-FM"},
   {775, "FM-NIIGATA"},
@@ -264,10 +276,11 @@ const FreqMemory FREQS_FM_CHUBU[] = {
   {834, "NHK-FM"},
   {840, "NHK-FM"},
   {888, "NHK-FM"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_KINKI[] = {
+  {0, NULL},
   {765, "FM COCOLO"},
   {770, "e-radio"},
   {802, "FM802"},
@@ -280,10 +293,11 @@ const FreqMemory FREQS_FM_KINKI[] = {
   {881, "NHK-FM"},
   {894, "\x1fSTATION"}, // α-STATION
   {899, "Kiss-FM KOBE"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_CHUGOKU[] = {
+  {0, NULL},
   {768, "FMｵｶﾔﾏ"},
   {774, "V-air ｴﾌｴﾑｻﾝｲﾝ"},
   {788, "V-air ｴﾌｴﾑｻﾝｲﾝ"},
@@ -294,10 +308,11 @@ const FreqMemory FREQS_FM_CHUGOKU[] = {
   {853, "NHK-FM"},
   {887, "NHK-FM"},
   {883, "NHK-FM"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_SHIKOKU[] = {
+  {0, NULL},
   {786, "FMｶｶﾞﾜ"},
   {797, "FMｴﾋﾒ"},
   {807, "ｴﾌｴﾑﾄｸｼﾏ"},
@@ -306,10 +321,11 @@ const FreqMemory FREQS_FM_SHIKOKU[] = {
   {860, "NHK-FM"},
   {877, "NHK-FM"},
   {875, "NHK-FM"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory FREQS_FM_KYUSHU[] = {
+  {0, NULL},
   {761, "LOVE FM"},
   {770, "CROSS FM"},
   {774, "FMK ｴﾌｴﾑ･ｸﾏﾓﾄ"},
@@ -338,7 +354,7 @@ const FreqMemory FREQS_FM_KYUSHU[] = {
   {881, "NHK-FM"},
   {889, "NHK-FM"},
   {891, "AFN"},
-  {0, NULL},
+  {65535, NULL},
 };
 
 const FreqMemory* const FREQS_AM[8] = {
