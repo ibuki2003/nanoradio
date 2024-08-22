@@ -6,22 +6,24 @@
 #define I2C_CLKRATE 50000
 #define I2C_PRERATE 200000
 
-uint8_t i2c_send_raw(uint8_t addr, const uint8_t *data, uint8_t sz, bool last);
-uint8_t i2c_recv_raw(uint8_t addr, uint8_t *data, uint8_t sz, bool last);
+uint8_t i2c_raw_start(uint8_t addr, bool recv);
+uint8_t i2c_raw_send(const uint8_t *data, uint8_t sz, bool last);
+uint8_t i2c_raw_recv(uint8_t *data, uint8_t sz, bool last);
 
 inline uint8_t i2c_send(uint8_t addr, const uint8_t* data, uint8_t sz) {
-	while(I2C1->STAR2 & I2C_STAR2_BUSY) {}
-  return i2c_send_raw(addr, data, sz, true);
+  return i2c_raw_start(addr, false) ?: i2c_raw_send(data, sz, true);
 }
 inline uint8_t i2c_recv(uint8_t addr, uint8_t* data, uint8_t sz) {
-	while(I2C1->STAR2 & I2C_STAR2_BUSY) {}
-  return i2c_recv_raw(addr, data, sz, true);
+  return i2c_raw_start(addr, true) ?: i2c_raw_recv(data, sz, true);
 }
 
 inline uint8_t i2c_send_recv(uint8_t addr, const uint8_t* send, uint8_t send_size, uint8_t* recv, uint8_t recv_size) {
-	while(I2C1->STAR2 & I2C_STAR2_BUSY) {}
-  return i2c_send_raw(addr, send, send_size, false)
-    ?: i2c_recv_raw(addr, recv, recv_size, true);
+  return (
+    i2c_raw_start(addr, false) ?:
+    i2c_raw_send(send, send_size, false) ?:
+    i2c_raw_start(addr, true) ?:
+    i2c_raw_recv(recv, recv_size, true)
+  );
 }
 
 inline void i2c_setup() {

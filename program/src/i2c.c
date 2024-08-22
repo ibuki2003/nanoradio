@@ -14,23 +14,31 @@ inline static uint8_t i2c_chk_evt(uint32_t event_mask) {
   return (status & event_mask) == event_mask;
 }
 
-/*
- * low-level packet send for blocking polled operation via i2c
- */
-uint8_t i2c_send_raw(uint8_t addr, const uint8_t *data, uint8_t sz, bool last)
+uint8_t i2c_raw_start(uint8_t addr, bool recv)
 {
+  // start
 
   // Set START condition
-  I2C1->CTLR1 |= I2C_CTLR1_START;
+  I2C1->CTLR1 |= I2C_CTLR1_START | (recv ? I2C_CTLR1_ACK : 0);
 
   // wait for master mode select
   WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
 
   // send 7-bit address + write flag
-  I2C1->DATAR = addr<<1;
+  I2C1->DATAR = addr<<1 | (recv ? 1 : 0);
 
-  // wait for transmit condition
-  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+  // wait for condition
+  if (recv) {
+    WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+  } else {
+    WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+  }
+
+  return 0;
+}
+
+uint8_t i2c_raw_send(const uint8_t *data, uint8_t sz, bool last)
+{
 
   // send data one byte at a time
   while(sz--) {
@@ -41,29 +49,21 @@ uint8_t i2c_send_raw(uint8_t addr, const uint8_t *data, uint8_t sz, bool last)
     I2C1->DATAR = *data++;
   }
 
-  // wait for tx complete
-  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+  if (last) {
 
-  // set STOP condition
-  if (last) I2C1->CTLR1 |= I2C_CTLR1_STOP;
+    // wait for tx complete
+    WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_BYTE_TRANSMITTED));
+
+    // set STOP condition
+    I2C1->CTLR1 |= I2C_CTLR1_STOP;
+  }
 
   // we're happy
   return 0;
 }
 
-uint8_t i2c_recv_raw(uint8_t addr, uint8_t *data, uint8_t sz, bool last)
+uint8_t i2c_raw_recv(uint8_t *data, uint8_t sz, bool last)
 {
-  // Set START condition
-  I2C1->CTLR1 |= I2C_CTLR1_START | I2C_CTLR1_ACK;
-
-  // wait for master mode select
-  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_MODE_SELECT));
-
-  // send 7-bit address + read flag
-  I2C1->DATAR = addr<<1 | 1;
-
-  // wait for transmit condition
-  WAIT_WHILE_TIMEOUT(!i2c_chk_evt(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
 
   // send data one byte at a time
   while(sz--) {
