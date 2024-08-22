@@ -6,7 +6,7 @@
 #define I2C_KT0913_ADDR 0x35
 #define FM_FREQ_MIN 320
 #define FM_FREQ_MAX 1100
-#define AM_FREQ_MIN 500
+#define AM_FREQ_MIN 504 // 9kHz steps
 #define AM_FREQ_MAX 1710
 
 void KT0913_init();
