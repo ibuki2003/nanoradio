@@ -67,31 +67,3 @@
 #define ﾞ "\xde"
 #define ﾟ "\xdf"
 
-
-#define ｶﾞ ｶ ﾞ
-#define ｷﾞ ｷ ﾞ
-#define ｸﾞ ｸ ﾞ
-#define ｹﾞ ｹ ﾞ
-#define ｺﾞ ｺ ﾞ
-#define ｻﾞ ｻ ﾞ
-#define ｼﾞ ｼ ﾞ
-#define ｽﾞ ｽ ﾞ
-#define ｾﾞ ｾ ﾞ
-#define ｿﾞ ｿ ﾞ
-#define ﾀﾞ ﾀ ﾞ
-#define ﾁﾞ ﾁ ﾞ
-#define ﾂﾞ ﾂ ﾞ
-#define ﾃﾞ ﾃ ﾞ
-#define ﾄﾞ ﾄ ﾞ
-#define ﾊﾞ ﾊ ﾞ
-#define ﾋﾞ ﾋ ﾞ
-#define ﾌﾞ ﾌ ﾞ
-#define ﾍﾞ ﾍ ﾞ
-#define ﾎﾞ ﾎ ﾞ
-#define ﾊﾟ ﾊ ﾟ
-#define ﾋﾟ ﾋ ﾟ
-#define ﾌﾟ ﾌ ﾟ
-#define ﾍﾟ ﾍ ﾟ
-#define ﾎﾟ ﾎ ﾟ
-#define ｳﾞ ｳ ﾞ
-
