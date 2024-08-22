@@ -1,5 +1,6 @@
 #include "ch32v003fun.h"
 #include <sys/types.h>
+#include <stdint.h>
 
 #include <buttons.h>
 #include <adc.h>
@@ -8,6 +9,8 @@
 #include <lcd.h>
 #include <kt0913.h>
 
+#include "freqs.h"
+#include "utils.h"
 
 // will be called on startup and after wake-up
 void setup() {
@@ -39,22 +42,12 @@ void setup() {
   i2c_setup();
 }
 
+// global state
 bool am = true;
 uint16_t am_freq = 594;
 uint16_t fm_freq = 847;
 uint8_t vol = 16;
-
-uint8_t my_itoa(uint16_t v, uint8_t* ptr, uint8_t limit) {
-  uint8_t i = 0;
-  do {
-    *ptr = '0' + (v % 10);
-    --ptr;
-    ++i;
-    if (i >= limit) break;
-    v /= 10;
-  } while (v);
-  return i;
-}
+uint8_t area = 2; // kanto
 
 void draw_l1() {
   uint8_t sbuf[9];
@@ -63,9 +56,6 @@ void draw_l1() {
   sbuf[2] = 'M';
   sbuf[3] = ' ';
   sbuf[4] = ' ';
-  sbuf[5] = ' ';
-  sbuf[6] = ' ';
-  sbuf[7] = ' ';
 
   if (am) {
     // 12345678
@@ -91,6 +81,26 @@ void draw_l1() {
   i2c_send(I2C_LCD_ADDR, sbuf, 9);
 }
 
+void draw_station_name() {
+  uint8_t sbuf[9];
+  for (uint i = 1; i < 9; ++i) sbuf[i] = ' ';
+  sbuf[0] = 0x40;
+  {
+    FreqMemory const* ptr = am ? FREQS_AM[area] : FREQS_FM[area];
+    uint16_t targ_freq = am ? am_freq : fm_freq;
+    for (; ptr->freq <= targ_freq; ++ptr) {
+      if (ptr->freq == targ_freq) {
+        my_strcpy(sbuf + 1, (const uint8_t*)ptr->name);
+        break;
+      }
+    }
+  }
+
+  // on line 2
+  LCD_send_command(0x80 | 0x40);
+  i2c_send(I2C_LCD_ADDR, sbuf, 9);
+}
+
 void add_freq(int8_t d) {
   if (am) {
     am_freq += 9 * d;
@@ -110,9 +120,6 @@ void add_freq(int8_t d) {
 void inner_main() {
   // here cpu is after power-up or wake-up
   setup();
-
-  int8_t scan_dir = 0;
-  Mode mode = MODE_NORMAL;
 
   Delay_Ms(300);
   get_buttons(); // reset button state
@@ -142,12 +149,14 @@ void inner_main() {
       if (button_hold[0] == 1 || button_hold[0] >= 50) {
         add_freq(-1);
         draw_l1();
+        draw_station_name();
       }
       if (button_release[1]) {
         am = !am;
         KT0913_set_amfm(am);
         add_freq(0);
         draw_l1();
+        draw_station_name();
       }
       if (button_hold[1] >= 100) {
         // go to sleep
@@ -162,31 +171,9 @@ void inner_main() {
       if (button_hold[2] == 1 || button_hold[2] >= 50) {
         add_freq(1);
         draw_l1();
+        draw_station_name();
       }
     }
-
-
-    v = KT0913_get_fmsnr();
-    sbuf[0] = 0x40;
-
-    sbuf[3] = '0' + (v % 10); v /= 10;
-    sbuf[2] = '0' + (v % 10); v /= 10;
-    sbuf[1] = '0' + (v % 10);
-
-    sbuf[4] = ' ';
-
-    v = KT0913_get_amrssi();
-
-    sbuf[7] = '0' + (v % 10); v /= 10;
-    sbuf[6] = '0' + (v % 10); v /= 10;
-    sbuf[5] = '0' + (v % 10);
-
-    // sbuf[7] = '0' + k % 10; k /= 10;
-    // sbuf[6] = '0' + k % 10; k /= 10;
-    // sbuf[5] = '0' + k % 10;
-
-    LCD_send_command(0x80 + 0x40);
-    i2c_send(I2C_LCD_ADDR, sbuf, 8);
 
     Delay_Ms(LOOP_INTERVAL);
   }

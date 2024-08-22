@@ -6,5 +6,5 @@ typedef struct FreqMemory {
   const char* name;
 } FreqMemory;
 
-const FreqMemory* const FREQS_AM[8];
-const FreqMemory* const FREQS_FM[8];
+extern const FreqMemory* const FREQS_AM[8];
+extern const FreqMemory* const FREQS_FM[8];
