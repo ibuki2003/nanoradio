@@ -6,18 +6,22 @@
 #define I2C_CLKRATE 50000
 #define I2C_PRERATE 200000
 
+#define I2C_ACQUIRE() while (I2C1->STAR2 & I2C_STAR2_BUSY) {}
 uint8_t i2c_raw_start(uint8_t addr, bool recv);
 uint8_t i2c_raw_send(const uint8_t *data, uint8_t sz, bool last);
 uint8_t i2c_raw_recv(uint8_t *data, uint8_t sz, bool last);
 
 inline uint8_t i2c_send(uint8_t addr, const uint8_t* data, uint8_t sz) {
+  I2C_ACQUIRE();
   return i2c_raw_start(addr, false) ?: i2c_raw_send(data, sz, true);
 }
 inline uint8_t i2c_recv(uint8_t addr, uint8_t* data, uint8_t sz) {
+  I2C_ACQUIRE();
   return i2c_raw_start(addr, true) ?: i2c_raw_recv(data, sz, true);
 }
 
 inline uint8_t i2c_send_recv(uint8_t addr, const uint8_t* send, uint8_t send_size, uint8_t* recv, uint8_t recv_size) {
+  I2C_ACQUIRE();
   return (
     i2c_raw_start(addr, false) ?:
     i2c_raw_send(send, send_size, false) ?:
