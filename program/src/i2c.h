@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define I2C_CLKRATE 50000
+#define I2C_CLKRATE 20000
 #define I2C_PRERATE 200000
 
 #define I2C_ACQUIRE() while (I2C1->STAR2 & I2C_STAR2_BUSY) {}
