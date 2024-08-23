@@ -294,6 +294,7 @@ Mode run_config() {
 }
 
 void inner_main() {
+  Delay_Ms(100);
   // here cpu is after power-up or wake-up
   setup();
 
