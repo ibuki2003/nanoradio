@@ -68,7 +68,7 @@ void LCD_send_command(uint8_t cmd) {
 void LCD_init() {
   const uint8_t* cmds = (const uint8_t*)(
     "\x38\x39\x14"
-      "\x73" // contrast set
+      "\x79" // contrast set
       "\x56\x6C\x38\x0C"
       "\x01" // Clear Disp
   );
