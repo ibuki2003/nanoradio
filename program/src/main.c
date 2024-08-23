@@ -15,6 +15,8 @@
 // will be called on startup and after wake-up
 void setup() {
   SystemInit();
+  Delay_Ms(100);
+
   RCC->APB1PCENR |= RCC_APB1Periph_I2C1;
   RCC->APB2PCENR |= (0
     | RCC_APB2Periph_AFIO
@@ -36,6 +38,8 @@ void setup() {
   funDigitalWrite(PC4, 0); // set down to turn on FET
   funDigitalWrite(PA1, 1); // pull-up
 
+  Delay_Ms(100);
+
   // ADC Setup
   adc_init();
 
@@ -52,7 +56,7 @@ typedef enum {
 // global state
 bool am = false;
 uint16_t am_freq = 594;
-uint16_t fm_freq = 847;
+uint16_t fm_freq = 800;
 uint8_t vol = 16;
 uint8_t area = 2; // kanto
 
@@ -299,22 +303,25 @@ Mode run_config() {
 }
 
 void inner_main() {
-  Delay_Ms(100);
   // here cpu is after power-up or wake-up
   setup();
 
-  Delay_Ms(300);
+  // Initialize LCD
+  LCD_init();
+
+  LCD_send_command(0x80);
+  i2c_send(I2C_LCD_ADDR, (const uint8_t*)("\x40HELLO"), 6);
 
   // reset button state
   get_buttons();
   mark_buttons_handled(0b111);
 
+  Delay_Ms(100);
+
   // Initialize IC
   KT0913_init();
   KT0913_set_vol(vol);
 
-  // Initialize LCD
-  LCD_init();
 
   KT0913_set_amfm(am);
   KT0913_set_freq_fm(fm_freq);
