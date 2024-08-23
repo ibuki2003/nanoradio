@@ -224,6 +224,11 @@ Mode run_freq() {
       if (button_release[1]) {
         am = !am;
         KT0913_set_amfm(am);
+        if (am) {
+          KT0913_set_freq_am(am_freq);
+        } else {
+          KT0913_set_freq_fm(fm_freq);
+        }
       }
 
       if (button_hold[1] >= 200) {
