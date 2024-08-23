@@ -2,7 +2,7 @@
 
 const uint8_t init_data[] = {
   // NOTE: each address has 16bit data
-  0x04, 0b00100000, 0b10000000, // VOLUME
+  0x04, 0b11100000, 0b10000000, // VOLUME
   0x05, 0b00010000, 0b00000000, // DSPCFGA
   0x0c, 0x00, 0b00101100, // LOCFGC
   0x0f, 0b10001000, 0b00011111, // RXCFG
