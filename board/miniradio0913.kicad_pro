@@ -492,7 +492,7 @@
     "netclass_patterns": [
       {
         "netclass": "Power",
-        "pattern": "VDD"
+        "pattern": "VDD|GND"
       }
     ]
   },
