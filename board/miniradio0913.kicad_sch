@@ -3163,6 +3163,12 @@
 		(uuid "620e3d74-ac27-44b8-b97b-c8e8eea305ee")
 	)
 	(junction
+		(at 176.53 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6901057e-ab90-40e3-908f-734cd779f44f")
+	)
+	(junction
 		(at 144.78 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3263,6 +3269,16 @@
 			(type default)
 		)
 		(uuid "087cc64b-b788-4b7b-98b5-2379ac10bea6")
+	)
+	(wire
+		(pts
+			(xy 173.99 95.25) (xy 176.53 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ac97f49-9109-414e-b0b1-bfe2ba700b5b")
 	)
 	(wire
 		(pts
@@ -4560,6 +4576,73 @@
 			(project ""
 				(path "/b7ea65bb-5637-4a68-8262-64ffd95ecdcf"
 					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 168.91 95.25 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4365f1ac-e159-4fd1-9bdc-77bdfd7f2ae1")
+		(property "Reference" "#PWR06"
+			(at 162.56 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 165.1 95.2499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 168.91 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 168.91 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 168.91 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3fddd855-4b8e-4030-9e41-a40ab1b44666")
+		)
+		(instances
+			(project ""
+				(path "/b7ea65bb-5637-4a68-8262-64ffd95ecdcf"
+					(reference "#PWR06")
 					(unit 1)
 				)
 			)
@@ -6814,6 +6897,73 @@
 			(project ""
 				(path "/b7ea65bb-5637-4a68-8262-64ffd95ecdcf"
 					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 171.45 95.25 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f9912683-8636-49eb-aa6a-add504965364")
+		(property "Reference" "C10"
+			(at 168.402 90.424 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1u"
+			(at 168.402 92.964 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+			(at 171.45 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 171.45 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 171.45 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e76b88d8-125e-4dd0-9051-e026e9fe02c4")
+		)
+		(pin "1"
+			(uuid "cbcc9110-6490-49b1-b376-a8a4acd66393")
+		)
+		(instances
+			(project ""
+				(path "/b7ea65bb-5637-4a68-8262-64ffd95ecdcf"
+					(reference "C10")
 					(unit 1)
 				)
 			)
