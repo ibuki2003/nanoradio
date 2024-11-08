@@ -325,6 +325,7 @@ void inner_main() {
 
   KT0913_set_amfm(am);
   KT0913_set_freq_fm(fm_freq);
+  KT0913_set_freq_am(am_freq);
 
   find_station_refresh(am ? am_freq : fm_freq, am, area);
 
